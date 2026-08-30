@@ -33,3 +33,14 @@ jobs:
         run: python tools/validate_skill.py
       - name: Validate evals JSON
         run: python -c "import json; d=json.load(open('evals/evals.json')); assert d['evals'] and all(e['expected_behaviors'] for e in d['evals']); print(f\"OK: {len(d['evals'])} evals\")"
+
+  validate-installer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Installer syntax check
+        run: |
+          bash -n install.sh
+          ./install.sh --list | grep -q "claude-code"
+      - name: Installer dry run
+        run: ./install.sh --dry-run --only=claude-code

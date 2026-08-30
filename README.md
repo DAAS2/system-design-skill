@@ -86,20 +86,29 @@ Every file in [`examples/`](examples/) was produced end-to-end by the skill in a
 
 20 fresh agent sessions, 10 tasks, blind-judged: **with-skill scored 56/56 (100%); baseline scored 46/56 (82%).** The skill didn't just change the answers — it changed the behaviors that matter: baseline recommended Kafka + multi-region + microservices for a 5k-rps URL shortener and produced no artifact for a codebase map; with-skill walked all 12 failure injections, right-sized every design, and persisted artifacts in every mode. Full table + methodology in [`evals/README.md`](evals/README.md). Reproduce it yourself — the eval suite ships in the repo.
 
-## Install
+## Install — 40+ agents, IDEs, and CLIs
 
-The skill folder is `system-design/` — standard Agent Skills format, works everywhere skills do.
+The skill folder is `system-design/` — standard Agent Skills format. It runs in every tool that speaks the standard: Claude Code, OpenCode, Codex, Cursor, Gemini CLI, Antigravity, GitHub Copilot, Windsurf, Kilo Code, Cline, Zed, and 30+ more. Pick one:
 
-| Tool | Install |
-|---|---|
-| Any (CLI) | `npx skills add DAAS2/system-design-skill` |
-| Claude Code | copy `system-design/` into `~/.claude/skills/` (personal) or `.claude/skills/` (project) |
-| Claude Code plugin | `/plugin marketplace add DAAS2/system-design-skill` then `/plugin install system-design` |
-| Claude.ai | zip the `system-design/` folder → Settings → Skills → upload |
-| OpenCode | copy into `.opencode/skills/` or `~/.config/opencode/skills/` |
-| Codex / Gemini CLI / Cursor / Windsurf | copy into the tool's skills directory (Agent Skills standard) |
+| # | Method | Covers |
+|---|---|---|
+| 1 | `npx skills add DAAS2/system-design-skill --agent '*'` | **Every tool detected on your machine** (40+ agents, auto-detected) |
+| 2 | `./install.sh` (macOS/Linux/Git-Bash) or `.\install.ps1` (Windows) | Every tool installed on this machine — detects, installs, idempotent, safe |
+| 3 | Copy `system-design/` into `~/.agents/skills/` | The ~10 tools that read the shared path natively (OpenCode, Codex, Cursor, Gemini CLI, Copilot, Cline, Amp, ...) — one copy covers them all |
+| 4 | Per-tool paths | Full 16-tool matrix + Claude.ai upload + Claude API in [INSTALL.md](INSTALL.md) |
 
-Verify the install: ask *"how would you architect a ticket booking system?"* — you should see capacity math before components, not a component zoo.
+Top tools at a glance:
+
+| Tool | Global path | Tool | Global path |
+|---|---|---|---|
+| Claude Code | `~/.claude/skills/` | GitHub Copilot | `~/.copilot/skills/` (also `~/.agents/skills/`) |
+| OpenCode | `~/.config/opencode/skills/` (also `~/.agents/skills/`) | Windsurf | `~/.codeium/windsurf/skills/` |
+| OpenAI Codex | `~/.codex/skills/` (also `~/.agents/skills/`) | Kilo Code | `~/.kilocode/skills/` |
+| Cursor | `~/.cursor/skills/` (also `~/.agents/skills/`) | Cline | `~/.cline/skills/` (also `~/.agents/skills/`) |
+| Gemini CLI | `~/.gemini/skills/` (also `~/.agents/skills/`) | Zed | `~/.config/zed/skills/` |
+| Antigravity | `~/.gemini/antigravity/skills/` | Command Code | `~/.commandcode/skills/` |
+
+Verify the install: ask *"how would you architect a ticket booking system?"* — you should see capacity math before components, not a component zoo. Full matrix, native commands, verification per tool, updating, and troubleshooting: **[INSTALL.md](INSTALL.md)**.
 
 ## What's inside
 

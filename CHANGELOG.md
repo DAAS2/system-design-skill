@@ -5,6 +5,8 @@ All notable changes to this project are documented here. Format follows [Keep a 
 ## [1.0.0] - 2026-08-30
 
 ### Added
+- `install.sh` + `install.ps1` — auto-detecting installers for every agent/IDE/CLI on the machine (14 targets, idempotent, guarded uninstall, `--list`/`--all`/`--only`/`--project`/`--dry-run`).
+- `INSTALL.md` — full 40+ tool install matrix: universal `.agents/skills/` path, per-tool paths, native commands, verification per tool, updating, uninstalling, troubleshooting.
 - Six modes: design, map (codebase reverse-engineering), review (10-dimension adversarial rubric), evolve (migration planning), interview (coach + seniority grading), component (decision-table answers).
 - The four gates: numbers (capacity math), stress-test (12 failure injections), right-sizing (6-tier table), cost (price catalog + anti-patterns).
 - `scripts/botec.py` — stdlib-only back-of-the-envelope calculator with golden tests.
