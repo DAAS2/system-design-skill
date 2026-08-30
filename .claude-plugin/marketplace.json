@@ -1,0 +1,14 @@
+{
+  "name": "system-design-skill",
+  "owner": {
+    "name": "system-design-skill contributors"
+  },
+  "plugins": [
+    {
+      "name": "system-design",
+      "source": "./system-design",
+      "description": "Codebase-first system design: map, design, review, and evolve architectures with capacity math, stress tests, right-sizing, and cost gates.",
+      "version": "1.0.0"
+    }
+  ]
+}

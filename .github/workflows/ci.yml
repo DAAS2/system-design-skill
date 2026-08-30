@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run botec golden tests
+        run: python -m unittest test_botec -v
+        working-directory: system-design/scripts
+      - name: Calculator smoke test
+        run: python botec.py full --dau 1000000 --reads-per-user 50 --writes-per-user 5
+        working-directory: system-design/scripts
+
+  validate-skill:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install PyYAML
+        run: pip install pyyaml
+      - name: Validate skill structure and frontmatter
+        run: python tools/validate_skill.py
+      - name: Validate evals JSON
+        run: python -c "import json; d=json.load(open('evals/evals.json')); assert d['evals'] and all(e['expected_behaviors'] for e in d['evals']); print(f\"OK: {len(d['evals'])} evals\")"

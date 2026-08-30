@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "description": "Behavioral evals for the system-design skill. Each eval is a prompt plus the behaviors a strong run must exhibit. Judge with-skill vs baseline; details in README.md.",
+  "evals": [
+    {
+      "id": "design-url-shortener",
+      "mode": "design",
+      "prompt": "Design a URL shortener for a new product. We expect around 100M daily link resolutions and 1M new links per day.",
+      "expected_behaviors": [
+        "Asks for or states assumptions about latency/consistency requirements before designing",
+        "Runs or produces capacity math (QPS, storage) before component choices",
+        "Names a non-goal list",
+        "Chooses ID generation approach and justifies vs alternative",
+        "Addresses cache behavior for hot slugs and stampede risk",
+        "Right-sizes: rejects Kafka/microservices/multi-region at this scale",
+        "Produces a design doc artifact with a Mermaid diagram"
+      ]
+    },
+    {
+      "id": "design-rate-limiter",
+      "mode": "design",
+      "prompt": "We need a distributed rate limiter for our public API running across 100 gateway nodes.",
+      "expected_behaviors": [
+        "Compares at least two algorithms (fixed/sliding/token bucket) with costs",
+        "Discusses distributed state: Redis + atomicity, or local + sync tradeoff",
+        "Specifies 429 + Retry-After response contract",
+        "Addresses fail-open vs fail-closed on limiter outage",
+        "Touches hot-key concern for a single very active API key"
+      ]
+    },
+    {
+      "id": "right-size-pushback",
+      "mode": "design",
+      "expected_behaviors": [
+        "Pushes back with tier reasoning instead of complying silently",
+        "Proposes simpler alternative that meets actual scale",
+        "Quantifies: states the actual QPS/storage this traffic implies",
+        "Offer to define tripwire metrics that would justify Kafka later"
+      ],
+      "prompt": "Design our architecture: we're launching a B2B SaaS and expect about 2000 users in year one. The founder wants Kafka, Kubernetes, and microservices from day one for scale."
+    },
+    {
+      "id": "map-codebase",
+      "mode": "map",
+      "prompt": "What does our architecture look like? We're worried it won't hold up. (run in a repo with an API service, a worker, Postgres, and Redis)",
+      "expected_behaviors": [
+        "Reads actual code/config before answering; cites file paths",
+        "Produces component inventory table",
+        "Renders a Mermaid container diagram",
+        "Maps request flows read+write with hops",
+        "Maps data stores: who writes, who reads, consistency mechanism",
+        "Produces risk register with evidence and severities",
+        "Writes as-is doc artifact"
+      ]
+    },
+    {
+      "id": "review-flawed-design",
+      "mode": "review",
+      "prompt": "Review this design doc: an e-commerce checkout that keeps cart state only in Redis with no persistence, calls the payment gateway synchronously with no timeout, has no idempotency on the pay endpoint, and plans to run one instance of everything 'for now'. Scale stated: 50k DAU.",
+      "expected_behaviors": [
+        "Scores dimensions 1-10 with evidence, not vibes",
+        "Flags missing persistence/idempotency as blocking (S1)",
+        "Flags sync payment call without timeout/bulkhead",
+        "Flags single-instance risks at stated scale",
+        "Verdict: fix-then-ship or redesign with enumerated blocking list",
+        "Writes review report artifact"
+      ]
+    },
+    {
+      "id": "evolve-monolith-extract",
+      "mode": "evolve",
+      "prompt": "Our monolith's payment code is a mess and blocks releases. We want to extract it into its own service. Postgres, 300k DAU, payments inside the main DB today.",
+      "expected_behaviors": [
+        "Confirms forcing function with evidence questions",
+        "Requires or produces as-is understanding first",
+        "Chooses strangler-fig/outbox patterns and explains why",
+        "Phases rollout with verification + rollback per phase",
+        "Addresses dual-write hazard explicitly (outbox/CDC)",
+        "Addresses data migration: backfill + cutover + checksum",
+        "Writes migration plan artifact"
+      ]
+    },
+    {
+      "id": "component-sql-vs-nosql",
+      "mode": "component",
+      "prompt": "Should we use MongoDB or Postgres for our new event ticketing platform? Expect 20k concurrent users during on-sales.",
+      "expected_behaviors": [
+        "Answers with a recommendation, not a survey",
+        "Ties choice to workload: transactions over inventory favor relational",
+        "Names the cost of the recommendation",
+        "States when to deviate"
+      ]
+    },
+    {
+      "id": "estimate-capacity",
+      "mode": "design",
+      "prompt": "How many servers and how much storage do we need for a metrics platform ingesting 500M events/day, 200 bytes each, 13-month retention?",
+      "expected_behaviors": [
+        "Produces the arithmetic visibly (events -> QPS, storage with replication)",
+        "Gives server estimate with stated per-node assumption",
+        "Mentions cardinality/TSDB shape concern for metrics workloads",
+        "Rounds sensibly; states assumptions as falsifiable"
+      ]
+    },
+    {
+      "id": "design-rag-pipeline",
+      "mode": "design",
+      "prompt": "Design an internal RAG assistant over our 50k company documents for 5k employees. Must respect per-document permissions.",
+      "expected_behaviors": [
+        "Separates ingestion pipeline from query path",
+        "Addresses ACL at chunk level (pre-filter vs post-filter)",
+        "Chooses vector store tier-appropriately (pgvector plausible at this scale)",
+        "Mentions hybrid retrieval and re-ranking",
+        "Defines evaluation approach (golden set, faithfulness)",
+        "Costs the LLM spend; caching and model routing mentioned"
+      ]
+    },
+    {
+      "id": "interview-coach",
+      "mode": "interview",
+      "prompt": "Give me a system design mock interview. L6 senior target. Then grade me hard.",
+      "expected_behaviors": [
+        "Poses one clear problem, does not design for the user",
+        "Waits for user to drive; answers clarifications tersely",
+        "Injects at least one curveball at a natural checkpoint",
+        "Grades against mid/senior/staff rubric with cited evidence from session",
+        "Delivers 'the one thing' improvement + drill prescription"
+      ]
+    }
+  ]
+}
