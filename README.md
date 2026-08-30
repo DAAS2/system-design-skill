@@ -7,7 +7,7 @@
 **A staff engineer's system design brain for your coding agent.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![CI](https://img.shields.io/github/actions/workflow/status/YOUR-USERNAME/system-design-skill/ci.yml?label=CI&logo=github)](.github/workflows/ci.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/DAAS2/system-design-skill/ci.yml?label=CI&logo=github)](.github/workflows/ci.yml)
 [![Evals](https://img.shields.io/badge/evals-with--skill%20100%25--vs--82%25-brightgreen)](evals/README.md)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-open%20standard-blueviolet)](https://agentskills.io)
@@ -92,14 +92,14 @@ The skill folder is `system-design/` — standard Agent Skills format, works eve
 
 | Tool | Install |
 |---|---|
-| Any (CLI) | `npx skills add YOUR-USERNAME/system-design-skill` |
+| Any (CLI) | `npx skills add DAAS2/system-design-skill` |
 | Claude Code | copy `system-design/` into `~/.claude/skills/` (personal) or `.claude/skills/` (project) |
-| Claude Code plugin | `/plugin marketplace add YOUR-USERNAME/system-design-skill` then `/plugin install system-design` |
+| Claude Code plugin | `/plugin marketplace add DAAS2/system-design-skill` then `/plugin install system-design` |
 | Claude.ai | zip the `system-design/` folder → Settings → Skills → upload |
 | OpenCode | copy into `.opencode/skills/` or `~/.config/opencode/skills/` |
 | Codex / Gemini CLI / Cursor / Windsurf | copy into the tool's skills directory (Agent Skills standard) |
 
-Verify the install: ask *"how would you architect a ticket booking system?"* — you should see capacity math before components, not a component zoo. (Replace `YOUR-USERNAME` in the commands above — the repo placeholder.)
+Verify the install: ask *"how would you architect a ticket booking system?"* — you should see capacity math before components, not a component zoo.
 
 ## What's inside
 
