@@ -32,7 +32,7 @@ jobs:
       - name: Validate skill structure and frontmatter
         run: python tools/validate_skill.py
       - name: Validate evals JSON
-        run: python -c "import json; d=json.load(open('evals/evals.json')); assert d['evals'] and all(e['expected_behaviors'] for e in d['evals']); print(f\"OK: {len(d['evals'])} evals\")"
+        run: python tools/validate_evals.py
 
   validate-installer:
     runs-on: ubuntu-latest
