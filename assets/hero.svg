@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-label="system-design skill: map, design, review, evolve — with four gates: numbers, stress-test, right-size, cost">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d1117"/>
+      <stop offset="1" stop-color="#101826"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#58a6ff"/>
+      <stop offset="1" stop-color="#bc8cff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="300" fill="url(#bg)"/>
+  <rect x="0" y="296" width="1200" height="4" fill="url(#accent)"/>
+
+  <text x="56" y="96" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="52" font-weight="700" fill="#e6edf3">system&#8209;design</text>
+  <text x="56" y="136" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="19" fill="#8b949e">a staff engineer&#8217;s system design brain for your coding agent</text>
+
+  <text x="56" y="196" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" fill="#58a6ff">map</text>
+  <text x="106" y="196" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" fill="#8b949e">&#183;</text>
+  <text x="126" y="196" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" fill="#3fb950">design</text>
+  <text x="196" y="196" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" fill="#8b949e">&#183;</text>
+  <text x="216" y="196" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" fill="#d29922">review</text>
+  <text x="286" y="196" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" fill="#8b949e">&#183;</text>
+  <text x="306" y="196" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" fill="#f472b6">evolve</text>
+  <text x="376" y="196" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" fill="#8b949e">&#183;</text>
+  <text x="396" y="196" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" fill="#a5d6ff">interview</text>
+
+  <text x="56" y="248" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#6e7681">reads your codebase &#183; forces the math &#183; walks every failure &#183; kills the over-engineering</text>
+
+  <!-- Gate chips -->
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="15" font-weight="600" text-anchor="middle">
+    <rect x="740" y="82" rx="8" width="150" height="40" fill="#161b22" stroke="#30363d"/>
+    <text x="815" y="107" fill="#58a6ff">numbers</text>
+    <path d="M898 102 h28 m0 0 l-7 -5 m7 5 l-7 5" stroke="#484f58" stroke-width="2" fill="none"/>
+    <rect x="936" y="82" rx="8" width="190" height="40" fill="#161b22" stroke="#30363d"/>
+    <text x="1031" y="107" fill="#f85149">stress&#8209;test</text>
+    <path d="M1134 102 h28 m0 0 l-7 -5 m7 5 l-7 5" stroke="#484f58" stroke-width="2" fill="none"/>
+    <rect x="740" y="146" rx="8" width="190" height="40" fill="#161b22" stroke="#30363d"/>
+    <text x="835" y="171" fill="#3fb950">right&#8209;size</text>
+    <path d="M838 128 v12 m0 0 l-5 -7 m5 7 l5 -7" stroke="#484f58" stroke-width="2" fill="none"/>
+    <rect x="936" y="146" rx="8" width="150" height="40" fill="#161b22" stroke="#30363d"/>
+    <text x="1011" y="171" fill="#d29922">cost</text>
+  </g>
+  <text x="913" y="228" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#6e7681" text-anchor="middle">four gates every design must pass</text>
+</svg>

@@ -109,7 +109,7 @@ rg -n "psql|postgres|mysql|mongo|dynamodb|ioredis|redis|elasticsearch|S3|s3Clien
 ls migrations/ db/migrate/ prisma/ 2>/dev/null
 
 # Scheduled/background work
-rg -n "cron|@Scheduled|Celery|sidekiq|worker|@coolify" -i -l
+rg -n "cron|@Scheduled|Celery|sidekiq|worker" -i -l
 ```
 
 Rules: cite paths, not vibes. If the repo is huge, sample the module tree and the two or three flows that matter most to the request. State what you did NOT read.

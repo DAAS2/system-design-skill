@@ -27,7 +27,7 @@ For systems with AI components. Numbers here move fast — treat as 2026-era def
 ## KV cache math
 
 Per token KV bytes ~= 2 (K and V) x layers x kv_heads x head_dim x bytes_per_param.
-Example 70B-class (80 layers, 8 KV heads, 128 dim, FP16): 2 x 80 x 8 x 128 x 2 = ~320 KiB/token... sanity: ~hundreds of KiB per token; 8k context ~= tens of GB per request pre-PagedAttention sharing. Consequence: context length x concurrency is the capacity dial; KV offloading (GPU -> CPU -> NVMe) trades latency for concurrency. State the formula and the dial in any LLM capacity estimate.
+Example 70B-class (80 layers, 8 KV heads, 128 head dim, FP16): 2 x 80 x 8 x 128 x 2 B = ~320 KiB per token; an 8k-token context holds ~2.6 GB of KV state per request pre-PagedAttention sharing. Consequence: context length x concurrency is the capacity dial; KV offloading (GPU -> CPU -> NVMe) trades latency for concurrency. State the formula and the dial in any LLM capacity estimate.
 
 ## Vector search
 

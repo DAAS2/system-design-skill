@@ -13,7 +13,7 @@ Artifacts this skill produces, with templates and Mermaid snippets. Copy the tem
 
 Path: `docs/design/YYYY-MM-DD-<name>.md`
 
-```markdown
+````markdown
 # Design: <name>
 Date: YYYY-MM-DD | Status: draft | Author: <who>
 
@@ -40,7 +40,7 @@ Date: YYYY-MM-DD | Status: draft | Author: <who>
 
 ```mermaid
 (see snippets below)
-`` `
+```
 
 ## Deep dives
 ### <component 1 — the hardest part>
@@ -66,13 +66,13 @@ Options considered -> choice -> cost -> revisit trigger.
 
 ## Open questions
 - (question, owner, needed-by)
-```
+````
 
 ## As-is architecture map
 
 Path: `docs/architecture/as-is.md`
 
-```markdown
+````markdown
 # Architecture (as-is)
 Date: YYYY-MM-DD | Codebase state: <commit/ref>
 
@@ -82,7 +82,7 @@ Date: YYYY-MM-DD | Codebase state: <commit/ref>
 ## Container diagram
 ```mermaid
 (see snippets)
-`` `
+```
 
 ## Component inventory
 | Component | Location (path) | Technology | Role |
@@ -106,7 +106,7 @@ entry -> ... -> store (one line per hop; cite file:line)
 
 ## Not read / unknown
 (what this map did NOT cover — honesty section)
-```
+````
 
 ## Review report
 

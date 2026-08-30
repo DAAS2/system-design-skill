@@ -58,7 +58,7 @@ Ballpark for gate-4 estimates. Label every estimate "approximate — verify curr
 | Serverless (Lambda-class) | $0.20/million requests + GB-s |
 | LLM API tokens | Rough order: small models ~$0.1-0.5 /M tokens, frontier ~$1-10 /M in / $2-15 /M out (verify!) |
 | GPU (H100-class on-demand) | $2-4/hr/GPU cloud; $1-2 spot/committed |
-| Domain + certificates | ~$10-60/yr (certs free: Let's Encrypt / cloud ACDS) |
+| Domain + certificates | ~$10-60/yr (certs free: Let's Encrypt / cloud ACME CAs) |
 
 Costs that surprise teams, in order of frequency: **egress**, idle autoscaled environments, orphaned volumes/snapshots, LLM tokens (uncontrolled agents), cross-AZ traffic (fractions of a cent x millions), and managed-DB backup storage.
 

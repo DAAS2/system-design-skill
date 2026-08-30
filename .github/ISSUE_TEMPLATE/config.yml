@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions & usage
+    url: https://github.com/YOUR-USERNAME/system-design-skill/discussions
+    about: "How do I / is this skill right for X — ask in Discussions"

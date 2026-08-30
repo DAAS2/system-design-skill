@@ -21,7 +21,7 @@ Default: Postgres. Deviate on evidence (numbers), not fashion. One more note: "N
 |---|---|---|
 | Trade | Latency (wait for replica) | Possible data loss on failover |
 | Use | Money, inventory, anything with "we cannot lose a write" | Feeds, analytics, caches, most content |
-| Middle | Semi-sync (one ack) — MySQL/Get-long-tail default | |
+| Middle | Semi-sync (wait for one replica ack) — common production mode | |
 
 ## Push vs pull (fanout)
 
@@ -63,7 +63,7 @@ Plus: TTL choice = staleness vs miss rate; hot-key protection = single-flight + 
 
 ## Monolith vs microservices
 
-Choose monolith by default. Split services when: team coordination is the bottleneck (not tech); a component has wildly different scaling/profile (heavy compute vs light CRUD); independent deploys are a proven need; fault isolation is required (Gemini: one crash shouldn't take checkout down).
+Choose monolith by default. Split services when: team coordination is the bottleneck (not tech); a component has wildly different scaling/profile (heavy compute vs light CRUD); independent deploys are a proven need; fault isolation is required (e.g., one crashy analytics job shouldn't take checkout down).
 Cost of microservices: distributed transactions (sagas/outbox), network failure handling, observability investment, platform team, service mesh questions. A modular monolith with clear internal boundaries captures 80% of the benefit at 20% of the cost.
 
 ## Batch vs stream

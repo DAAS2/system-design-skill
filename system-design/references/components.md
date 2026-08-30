@@ -70,7 +70,7 @@ Each block: what it does, when to reach for it, the numbers that matter, common 
 
 - Selection table in tradeoffs.md. Kafka: partitions = parallelism unit; size partitions for peak consumer throughput (consumer per partition); retention by time/size enables replay; consumer groups rebalance on membership change.
 - Numbers: 100k-1M msg/s/broker batched; end-to-end latency ~ms tens.
-- Mistakes: unpartitioned topic for high-throughource ordered stream (bottleneck), no DLQ, consumers assuming exactly-once, schema evolution unplanned (use a schema registry).
+- Mistakes: unpartitioned topic for a high-throughput ordered stream (single-partition bottleneck), no DLQ, consumers assuming exactly-once, schema evolution unplanned (use a schema registry).
 
 ## API gateway
 
@@ -98,7 +98,7 @@ Each block: what it does, when to reach for it, the numbers that matter, common 
 
 ## Auth
 
-- Sessions (server-side state, cookie) vs JWT (stateless, revocation pain — keep access tokens short + refresh tokens revocable). Internal: mTLS/service identity (spiffe/SPIFFE-ish) at tier 4+.
+- Sessions (server-side state, cookie) vs JWT (stateless, revocation pain — keep access tokens short + refresh tokens revocable). Internal service-to-service: mTLS with workload identity (SPIFFE-style) at tier 4+.
 - Numbers: bcrypt/argon2 verify ~100-250 ms (by design); token validation should be local (JWKS cache).
 - Mistakes: JWTs that can't be revoked for logout, secrets in repos, no per-tenant authorization checks (IDOR class bugs — authN is not authZ).
 

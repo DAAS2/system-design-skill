@@ -42,7 +42,8 @@
     {
       "id": "map-codebase",
       "mode": "map",
-      "prompt": "What does our architecture look like? We're worried it won't hold up. (run in a repo with an API service, a worker, Postgres, and Redis)",
+      "fixture": "fixtures/demo-app",
+      "prompt": "What does our architecture look like? We're worried it won't hold up.",
       "expected_behaviors": [
         "Reads actual code/config before answering; cites file paths",
         "Produces component inventory table",
@@ -118,13 +119,15 @@
     {
       "id": "interview-coach",
       "mode": "interview",
-      "prompt": "Give me a system design mock interview. L6 senior target. Then grade me hard.",
+      "fixture": "fixtures/interview-transcript.md",
+      "prompt": "That was rough. Here's the transcript of my system design mock interview attempt (chat system, L6 senior target). Grade me hard.",
       "expected_behaviors": [
-        "Poses one clear problem, does not design for the user",
-        "Waits for user to drive; answers clarifications tersely",
-        "Injects at least one curveball at a natural checkpoint",
-        "Grades against mid/senior/staff rubric with cited evidence from session",
-        "Delivers 'the one thing' improvement + drill prescription"
+        "Grades against a mid/senior/staff rubric with evidence cited from the transcript",
+        "Identifies the missing numbers/estimation gap explicitly",
+        "Identifies the memorized-architecture red flags (Kafka/K8s reflex, 'Mongo scales', 'automatic failover just works')",
+        "Identifies the real gaps: fanout for huge channels, duplicate delivery/idempotency, delivery receipts consistency",
+        "Delivers 'the one thing' single highest-leverage improvement",
+        "Provides a drill prescription (what to practice next)"
       ]
     }
   ]

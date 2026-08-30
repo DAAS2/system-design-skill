@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgres://shop:shop@db:5432/shop
+      - REDIS_URL=redis://cache:6379/0
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+    depends_on:
+      - db
+      - cache
+  worker:
+    build: .
+    command: python -m worker.email_worker
+    environment:
+      - DATABASE_URL=postgres://shop:shop@db:5432/shop
+      - REDIS_URL=redis://cache:6379/0
+    depends_on:
+      - db
+      - cache
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=shop
+      - POSTGRES_PASSWORD=shop
+      - POSTGRES_DB=shop
+  cache:
+    image: redis:7
