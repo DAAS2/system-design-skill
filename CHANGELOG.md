@@ -5,6 +5,10 @@ All notable changes to this project are documented here. Format follows [Keep a 
 ## [1.0.0] - 2026-08-30
 
 ### Added
+- `HANDBOOK.md` — the complete project record: what the skill does, evidence, users, competition, marketing & distribution playbook, star strategy, maintenance, risks, repo map, metrics.
+- `examples/design-griller-baseline-vs-skill.md` — same prompt, two agents, one tear-down (real eval outputs).
+- `evals/run.sh` — one-command eval reproduction: deterministic checks + scaffold + prompts + judge checklists.
+- README: "Try it in 60 seconds" (interview coach, design griller, design mode), griller + eval-runner references.
 - `install.sh` + `install.ps1` — auto-detecting installers for every agent/IDE/CLI on the machine (14 targets, idempotent, guarded uninstall, `--list`/`--all`/`--only`/`--project`/`--dry-run`).
 - `INSTALL.md` — full 40+ tool install matrix: universal `.agents/skills/` path, per-tool paths, native commands, verification per tool, updating, uninstalling, troubleshooting.
 - Six modes: design, map (codebase reverse-engineering), review (10-dimension adversarial rubric), evolve (migration planning), interview (coach + seniority grading), component (decision-table answers).

@@ -1,0 +1,1 @@
+Review this design doc: an e-commerce checkout that keeps cart state only in Redis with no persistence, calls the payment gateway synchronously with no timeout, has no idempotency on the pay endpoint, and plans to run one instance of everything 'for now'. Scale stated: 50k DAU.

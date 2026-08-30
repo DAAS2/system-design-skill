@@ -49,6 +49,16 @@ With the skill:
   dedicated shard for the whale. All 12 failure injections walked.
 ```
 
+## Try it in 60 seconds
+
+Three prompts that show the whole thing. Paste any of them into your agent after installing:
+
+| Say | You get |
+|---|---|
+| *"Mock system design interview — L6 target — grade me hard."* | The **interview coach**: poses a problem, injects curveballs as you answer, then grades you against a mid/senior/staff rubric with cited evidence — including *the one thing* to fix next. Brutally honest by design (see [the grading example](examples/interview-grading-chat-system.md)). |
+| *"Review this design: <paste your agent's architecture>."* | The **design griller**: 10-dimension scored report, blocking findings, verdict. Run it on the design your agent gave you yesterday — [watch a baseline design get torn apart](examples/design-griller-baseline-vs-skill.md). |
+| *"Design a URL shortener for 100M daily reads."* | The **design mode**: capacity math → architecture → all 12 failure injections walked → cost → a persisted design doc with a Mermaid diagram. |
+
 ## Six modes, auto-detected
 
 | Mode | Ask things like | You get |
@@ -75,6 +85,7 @@ Every file in [`examples/`](examples/) was produced end-to-end by the skill in a
 
 | Example | What it shows |
 |---|---|
+| [The design griller](examples/design-griller-baseline-vs-skill.md) | **Same prompt, two agents, one tear-down** — the baseline recommends Kafka + microservices + multi-region for a 5k-rps URL shortener; the skill's design survives the review |
 | [URL shortener design](examples/design-url-shortener.md) | Snowflake→base62 ID generation, "stampede-by-construction" caching, right-sized monolith |
 | [Distributed rate limiter](examples/design-rate-limiter.md) | Capacity-first framing, sliding-window counter, fail-open analysis, 12-injection table |
 | [As-is map of a small e-commerce repo](examples/as-is-map-demo-app.md) | Reverse-engineering with file:line evidence + risk register |
@@ -84,7 +95,9 @@ Every file in [`examples/`](examples/) was produced end-to-end by the skill in a
 
 ## Does it actually work? Yes — measured.
 
-20 fresh agent sessions, 10 tasks, blind-judged: **with-skill scored 56/56 (100%); baseline scored 46/56 (82%).** The skill didn't just change the answers — it changed the behaviors that matter: baseline recommended Kafka + multi-region + microservices for a 5k-rps URL shortener and produced no artifact for a codebase map; with-skill walked all 12 failure injections, right-sized every design, and persisted artifacts in every mode. Full table + methodology in [`evals/README.md`](evals/README.md). Reproduce it yourself — the eval suite ships in the repo.
+20 fresh agent sessions, 10 tasks, blind-judged: **with-skill scored 56/56 (100%); baseline scored 46/56 (82%).** The skill didn't just change the answers — it changed the behaviors that matter: baseline recommended Kafka + multi-region + microservices for a 5k-rps URL shortener and produced no artifact for a codebase map; with-skill walked all 12 failure injections, right-sized every design, and persisted artifacts in every mode. Full table + methodology in [`evals/README.md`](evals/README.md).
+
+**Reproduce it yourself, one command:** `./evals/run.sh` runs the deterministic checks, scaffolds the baseline/with-skill folders for all 10 evals, prints the prompts and the judging checklists. Publish your model's numbers as a PR — different models behave differently, and every data point keeps the claims honest.
 
 ## Install — 40+ agents, IDEs, and CLIs
 
