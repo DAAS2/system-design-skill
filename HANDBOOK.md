@@ -157,7 +157,7 @@ Supporting hooks:
 **Day 0 — prep:**
 - [x] Repo polished: README, hero SVG, badges, examples, evals, INSTALL.md, installers
 - [ ] GitHub repo created, pushed, About description + topics filled
-  (description suggestion: *"A staff engineer's system design brain for coding agents — map, design, review, and evolve architectures with capacity math, failure tests, and right-sizing gates. Works in 40+ agents."*)
+  (description suggestion: *"System design for coding agents: map, design, review & evolve architectures with capacity math, failure stress-tests, and right-sizing gates."*)
   (topics: system-design, agent-skills, claude-code, opencode, cursor, codex, architecture, distributed-systems, llm, rag, skills)
 - [ ] Release v1.0.0 tag + GitHub Release notes
 - [ ] `examples/design-griller-baseline-vs-skill.md` rendered to a screenshot for social posts
