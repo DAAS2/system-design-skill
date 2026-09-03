@@ -56,7 +56,7 @@ auto() {
   echo "tool: $TOOL · reps: $REPS · set: $SET · timeout/call: ${TIMEOUT}s${ONLY:+ · only: $ONLY}"
   echo
   python - "$TOOL" "$REPS" "$SET" "$TIMEOUT" "$ROOT" "$ONLY" <<'PY'
-import json, pathlib, re, subprocess, sys, datetime, shutil
+import json, pathlib, re, subprocess, sys, datetime, shutil, tempfile
 
 tool, reps, only_set, timeout, root, only_arg = (
     sys.argv[1], int(sys.argv[2]), sys.argv[3], int(sys.argv[4]), pathlib.Path(sys.argv[5]), sys.argv[6])
@@ -93,8 +93,11 @@ STEP 1 (answer this first): Would you load that skill to work on the query above
 STEP 2: Answer the query as you normally would."""
 
 sets = ["train", "validation"] if only_set == "all" else [only_set]
-workdir = root / "evals" / "out" / "triggers" / f"{tool}-{datetime.date.today().isoformat()}"
-workdir.mkdir(parents=True, exist_ok=True)
+# The agent's cwd must NOT be inside any git repo: trigger-run agents do real
+# work (maps, ADRs, capacity plans) and will write artifacts into whatever
+# project root they find. Use a neutral temp dir.
+workdir = pathlib.Path(tempfile.mkdtemp(prefix="trigger-run-"))
+print(f"agent workspace: {workdir}")
 stamp = datetime.date.today().isoformat()
 res_path = workdir / f"results-{tool}-{stamp}.json"
 
