@@ -39,12 +39,21 @@ Scoring per set:
 
 The train set exists to tune the description (oblique phrasings, explicit exclusions); the validation set is the held-out verdict — never tune on it. Should-not cases concentrate on collision-heavy territory: "design a logo" (visual design), single-query DB tuning, pipeline debugging, framework pickers. When you change the description, re-run the train set first, then the validation set; publish both tables as a PR.
 
-**Status (2026-09-03):** the suite is now **automated** — `./run_triggers.sh --auto --tool <cli>` invokes the agent per case, records both the YES/NO self-report **and behavioral evidence** (whether the host actually loaded the skill — parsed from the tool's own load log), tallies the rates, and writes `evals/out/triggers/results-<tool>-<date>.{json,md}`. Supported CLIs: opencode, claude, codex, gemini (unknown tools fall back to `<tool> run <prompt>`). The skill's installed copies (opencode + shared `~/.agents/skills`) carry the hardened description as of this date. **No full tally published yet** — run the command below and PR the table; Claude Code and Codex numbers are the most wanted data points.
+**Status (2026-09-04): the suite has a published run.** `./run_triggers.sh --auto --tool opencode` executed all 20 cases against the host CLI (OpenCode, default model), recording both the YES/NO self-report and behavioral evidence (whether the host actually loaded the skill, parsed from the tool's own load log):
+
+| Set | Trigger rate (said yes) | False-load rate | Behavioral load | Behavioral false-load |
+|---|---|---|---|---|
+| train (10) | **1.00** | **0.00** | **1.00** | **0.00** |
+| validation (10) | **1.00** | **0.00** | **1.00** | **0.00** |
+
+Verdict: **PASS** (threshold 0.5; target ≥0.80/≤0.20 met). Scope, honestly: one tool, one model (OpenCode's default), n=1 per case, run 2026-09-03/04 — full per-case table in `out/triggers/opencode-2026-09-04/results-opencode-2026-09-04.md`. Every should-trigger query — including the oblique ones ("should we split this service", "is Postgres enough", "our DB is falling over at peak") — behaviorally loaded the skill; every should-not query ("design a logo", CSS, single-query tuning, pipeline debugging) correctly rejected it. **Claude Code and Codex tallies are the next most wanted data points** — the CLI is the only thing that changes:
 
 ```bash
-bash evals/run_triggers.sh --auto --tool opencode --reps 1   # ~15-25 min, streams per case
-bash evals/run_triggers.sh --auto --tool claude  --reps 3    # protocol target
+bash evals/run_triggers.sh --auto --tool claude --reps 3
+bash evals/run_triggers.sh --auto --tool codex  --reps 3
 ```
+
+The train set exists to tune the description (oblique phrasings, explicit exclusions); the validation set is the held-out verdict — never tune on it. When you change the description, re-run the train set first, then the validation set; publish both tables as a PR.
 
 ## Iteration log
 

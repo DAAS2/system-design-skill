@@ -1,6 +1,6 @@
 # ADR: Externalize session storage off the app server
 
-Date: 2026-09-03 | Status: Proposed | Author: architecture review
+Date: 2026-09-03 (amended 2026-09-04: added Non-goals) | Status: Proposed | Author: architecture review
 Forcing function: operational risk + blocked scaling (evidence needed before Phase 6 — see "Do not start until")
 
 ## Context
@@ -35,6 +35,15 @@ Decisions these numbers force:
 ```
 
 Session-specific correction: the 5-year storage figure does not apply — sessions expire. Steady state = sessions created per day × TTL = 300k keys × 1 KiB ≈ **300 MB** (×2 for replication overhead ≈ <1 GB). **Numbers force the conclusion: this migration is about decoupling, not capacity.** Any store will hold it; the decision is which failure and ops profile we accept.
+
+## Non-goals
+
+- **No authn/authz redesign** — MFA, OAuth/OIDC flows, password policy are untouched; this ADR relocates session state, nothing else.
+- **No session persistence** — a Redis flush or botched failover means re-login; accepted explicitly (see Consequences). We will not pay the AOF/RDB tax for replaceable state.
+- **No multi-region session replication** — regional failover ends in a one-time re-login (failure-mode #9); revisiting this is a tier-3+ decision, not a now decision.
+- **No shared session/auth service v1** — `SessionStore` stays an in-app library; promotion to a shared component is pre-declared in Evolution, not built speculatively.
+- **No cookie-format or client-facing contract change** — browsers and request handlers see byte-identical behavior; the swap is invisible.
+- **No co-location of adjacent state on the new Redis** (rate-limit counters, WebSocket registries, job locks) — same node could absorb them, but each is a separate decision with its own failure-domain analysis.
 
 ## Decision
 
