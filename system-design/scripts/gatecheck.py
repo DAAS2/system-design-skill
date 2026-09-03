@@ -144,6 +144,16 @@ def check_document(text: str) -> list:
     ]
 
 
+def is_comparison_doc(text: str) -> bool:
+    """Teardown/comparison documents (e.g. examples/design-griller-*.md) contrast a
+    baseline and a skill output — they are not a single produced design, so the gate
+    contract does not apply. Detection is content-based, not filename-based."""
+    low = text.lower()
+    has_verdicts = "what the baseline" in low or "baseline claim" in low
+    has_marker = "tear-down" in low or "teardown" in low or "griller" in low
+    return has_marker and has_verdicts
+
+
 def main(argv: list) -> int:
     args = [a for a in argv if not a.startswith("--")]
     flags = {a for a in argv if a.startswith("--")}
@@ -160,6 +170,18 @@ def main(argv: list) -> int:
         print(f"gatecheck: file not found: {path}", file=sys.stderr)
         return 2
     text = path.read_text(encoding="utf-8")
+
+    if is_comparison_doc(text):
+        msg = (
+            "gatecheck: this is a baseline-vs-skill comparison/teardown document, not a "
+            "produced design — the gate contract applies to design-mode artifacts only "
+            "(the repo CI-checks examples/design-url-shortener.md and design-rate-limiter.md)"
+        )
+        if "--json" in flags:
+            print(json.dumps({"file": str(path), "ok": None, "skipped": msg}, indent=2))
+        else:
+            print(msg)
+        return 2
 
     results = check_document(text)
     ok = all(r["ok"] for r in results)

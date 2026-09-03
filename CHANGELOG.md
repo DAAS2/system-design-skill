@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning is [SemVer](https://semver.org/) — MAJOR when the method changes incompatibly, MINOR for new content, PATCH for corrections.
 
+## [Unreleased]
+
+### Added
+- **`DEMO.md`** — three copy-paste prompts (oblique component question, repository map, hard grade), each linked to the real artifact it should resemble. Installation is not proof.
+- **`.github/ISSUE_TEMPLATE/field_report.yml`** — field-report issue form (agent, model, verbatim prompt, detected mode, auto-trigger y/n, output link, what helped, what failed, quote permission). Field reports outrank feature requests.
+- **`evals/run_triggers.sh --auto`** — automated trigger runs: invokes a host CLI (opencode/claude/codex/gemini) per case, records the YES/NO self-report plus behavioral evidence (whether the host actually loaded the skill), tallies self-report and behavioral rates, writes `evals/out/triggers/results-<tool>-<date>.{json,md}`.
+
+### Changed
+- **gatecheck.py** now detects baseline-vs-skill comparison/teardown documents and exits 2 (skipped, with an explanation) instead of failing them — `examples/design-griller-baseline-vs-skill.md` is a tear-down, not a produced design; CI checks the two design artifacts.
+- README/HANDBOOK refreshed after the description hardening: SKILL.md is 148 lines (was reported as 132), frontmatter estimate ~270 tokens (was ~120).
+
 ## [1.0.0] - 2026-09-03
 
 ### Added

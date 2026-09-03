@@ -127,7 +127,7 @@ Verify the install: ask *"how would you architect a ticket booking system?"* —
 
 ```
 system-design/
-├── SKILL.md                 # mode router + the four gates (132 lines — ~2k tokens on trigger)
+├── SKILL.md                 # mode router + the four gates (148 lines — ~2k tokens on trigger)
 ├── scripts/
 │   ├── botec.py             # capacity calculator: QPS, storage, bandwidth, servers, cost forces
 │   └── test_botec.py        # golden-value tests
@@ -165,7 +165,7 @@ Knowledge lineage: DDIA (Kleppmann), System Design Interview Vol 1-2 (Alex Xu), 
 
 ## FAQ
 
-**How much context does it cost when not in use?** Only the frontmatter (`name` + `description`, ~120 tokens) is always loaded — the same as any installed skill. The 132-line SKILL.md loads only when a matching request triggers it; references load on demand.
+**How much context does it cost when not in use?** Only the frontmatter (`name` + `description`, ~270 tokens — the hardened description is the load-bearing string) is always loaded — the same as any installed skill. The 148-line SKILL.md loads only when a matching request triggers it; references load on demand.
 
 **Does it call external APIs?** No. No network, no keys, no telemetry. `botec.py` is stdlib-only Python doing arithmetic. Install it sight-unseen or audit it — both are fine (see SECURITY.md).
 

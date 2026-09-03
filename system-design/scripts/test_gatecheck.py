@@ -102,6 +102,12 @@ class TestGatecheck(unittest.TestCase):
         self.assertIn("non-goals", secs)
         self.assertIn("10x", secs["evolution"])
 
+    def test_teardown_docs_are_skipped_not_failed(self):
+        self.assertTrue(gatecheck.is_comparison_doc(
+            "# The design griller\n\n## What the baseline agent built (excerpts)\n"
+            "## What the skill produced (excerpts)\n## The tear-down\n"))
+        self.assertFalse(gatecheck.is_comparison_doc(PASSING_DOC))
+
 
 if __name__ == "__main__":
     unittest.main()

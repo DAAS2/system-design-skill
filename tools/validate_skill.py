@@ -29,6 +29,22 @@ def check(cond: bool, msg: str) -> None:
         failures.append(msg)
 
 
+def parse_minimal_frontmatter(fm_text: str) -> dict:
+    """Minimal fallback frontmatter parser used when PyYAML is unavailable.
+
+    Flat ``key: value`` lines only. Values are kept verbatim (no quote or
+    comment handling). Lines are ignored when malformed, blank, indented
+    (nested mappings and lists are unsupported), or when the value opens a
+    folded scalar with ``>``.
+    """
+    fm = {}
+    for ln in fm_text.splitlines():
+        m = re.match(r"^(\w[\w-]*):\s*(.*)$", ln)
+        if m and not m.group(2).startswith(">"):
+            fm[m.group(1)] = m.group(2).strip()
+    return fm
+
+
 def main() -> int:
     root = Path(__file__).resolve().parent.parent
     skill_dir = root / "system-design"
@@ -57,12 +73,7 @@ def main() -> int:
 
         fm = yaml.safe_load(fm_text) or {}
     except ImportError:
-        # Minimal fallback parser: key: value lines only
-        fm = {}
-        for ln in fm_text.splitlines():
-            m = re.match(r"^(\w[\w-]*):\s*(.*)$", ln)
-            if m and not m.group(2).startswith(">"):
-                fm[m.group(1)] = m.group(2).strip()
+        fm = parse_minimal_frontmatter(fm_text)
         print("note: PyYAML not installed, using minimal frontmatter parser")
 
     name = str(fm.get("name", ""))

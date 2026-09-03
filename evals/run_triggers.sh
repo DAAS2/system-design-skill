@@ -9,10 +9,16 @@
 # query, tally the trigger rate, compare against the threshold.
 #
 # Usage:
-#   ./run_triggers.sh            # checks + worksheet + prompts + scoring rules
-#   ./run_triggers.sh --checks   # validate trigger_evals.json structure only
-#   ./run_triggers.sh --prompts  # print the per-query prompts to paste
-#   ./run_triggers.sh --judge    # print the scoring rules + tally template
+#   ./run_triggers.sh                # checks + prompts + scoring rules
+#   ./run_triggers.sh --checks       # validate trigger_evals.json structure only
+#   ./run_triggers.sh --prompts      # print the per-query prompts to paste
+#   ./run_triggers.sh --judge        # print the scoring rules + tally template
+#   ./run_triggers.sh --auto --tool opencode [--reps N] [--set all|train|validation]
+#       Invoke the agent CLI per case, parse YES/NO, tally, and write
+#       evals/out/triggers/results-<tool>-<date>.{json,md}. Supported tools:
+#       opencode (`run`), claude (`-p`), codex (`exec`), gemini (positional);
+#       unknown tools fall back to `<tool> run <prompt>`. reps defaults to 1
+#       (protocol target: 3 — publish n with the table).
 #
 # Windows: run inside Git-Bash.
 
@@ -27,8 +33,123 @@ case "${1:-}" in
   --checks) MODE="checks" ;;
   --prompts) MODE="prompts" ;;
   --judge) MODE="judge" ;;
-  *) echo "error: unknown flag $1 (--checks | --prompts | --judge)" >&2; exit 1 ;;
+  --auto) MODE="auto" ;;
+  *) echo "error: unknown flag $1" >&2; exit 1 ;;
 esac
+
+auto() {
+  TOOL="opencode"; REPS=1; SET="all"; TIMEOUT=240
+  shift || true
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --tool) TOOL="$2"; shift 2 ;;
+      --reps) REPS="$2"; shift 2 ;;
+      --set) SET="$2"; shift 2 ;;
+      --timeout) TIMEOUT="$2"; shift 2 ;;
+      *) echo "error: unknown --auto option $1" >&2; exit 1 ;;
+    esac
+  done
+  echo "== Trigger evals — automated run =="
+  echo "tool: $TOOL · reps: $REPS · set: $SET · timeout/call: ${TIMEOUT}s"
+  echo
+  python - "$TOOL" "$REPS" "$SET" "$TIMEOUT" "$ROOT" <<'PY'
+import json, pathlib, re, subprocess, sys, datetime, shutil
+
+tool, reps, only_set, timeout, root = sys.argv[1], int(sys.argv[2]), sys.argv[3], int(sys.argv[4]), pathlib.Path(sys.argv[5])
+spec = json.loads((root / "evals" / "trigger_evals.json").read_text(encoding="utf-8"))
+skill = (root / "system-design" / "SKILL.md").read_text(encoding="utf-8")
+desc = re.search(r"description:\s*(.+)", skill.split("---")[1]).group(1).strip()
+
+def build_cmd(prompt):
+    if tool == "claude":
+        return ["claude", "-p", prompt]
+    if tool == "codex":
+        return ["codex", "exec", prompt]
+    if tool == "gemini":
+        return ["gemini", prompt]
+    if tool == "opencode":
+        return ["opencode", "run", prompt]
+    return [tool, "run", prompt]
+
+if not shutil.which(build_cmd("x")[0]):
+    print(f"error: `{tool}` CLI not found on PATH", file=sys.stderr)
+    sys.exit(2)
+
+TEMPLATE = """QUERY:
+{query}
+
+Before answering the query itself: a skill named "system-design" is installed, with this description on file:
+
+---
+{desc}
+---
+
+STEP 1 (answer this first): Would you load that skill to work on the query above? Answer exactly YES or NO, then one line why.
+STEP 2: Answer the query as you normally would."""
+
+sets = ["train", "validation"] if only_set == "all" else [only_set]
+workdir = root / "evals" / "out" / "triggers" / f"{tool}-{datetime.date.today().isoformat()}"
+workdir.mkdir(parents=True, exist_ok=True)
+
+rows, tally = [], {"train": {"hit": 0.0, "n": 0}, "validation": {"hit": 0.0, "n": 0}}
+for set_name in sets:
+    for case in spec[set_name]:
+        rates = []
+        answers, loaded_flags = [], []
+        for rep in range(reps):
+            prompt = TEMPLATE.format(query=case["query"], desc=desc)
+            try:
+                out = subprocess.run(build_cmd(prompt), text=True,
+                                     timeout=timeout, cwd=str(workdir),
+                                     stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                resp = out.stdout or ""
+            except subprocess.TimeoutExpired:
+                resp = ""
+                print(f"  TIMEOUT {case['id']} rep{rep + 1}", file=sys.stderr, flush=True)
+            m = re.search(r"(?im)^\s*\**\s*(yes|no)\b", resp) or re.search(r"\b(yes|no)\b", resp[:600], re.I)
+            ans = m.group(1).lower() if m else "?"
+            # behavioral evidence: did the host actually load the skill?
+            loaded = 'skill "system-design"' in resp.lower()
+            answers.append(ans)
+            loaded_flags.append(loaded)
+            rates.append(1.0 if (ans == "yes") == case["should_trigger"] else 0.0)
+        hit = sum(1.0 if (a == "yes") == case["should_trigger"] else 0.0 for a in answers) / reps
+        loaded_hit = sum(1.0 if l == case["should_trigger"] else 0.0 for l in loaded_flags) / reps
+        tally[set_name]["hit"] += hit
+        tally[set_name]["n"] += 1
+        rows.append({"id": case["id"], "set": set_name, "should": case["should_trigger"],
+                     "answers": answers, "loaded": loaded_flags, "rate": hit, "loaded_rate": loaded_hit})
+        flag = "ok " if hit >= 0.5 else "MISS"
+        print(f"  [{flag}] {case['id']:<28} want={'Y' if case['should_trigger'] else 'N'} "
+              f"said={','.join(a.upper() for a in answers)} loaded={','.join('Y' if l else 'N' for l in loaded_flags)}", flush=True)
+
+def rate_for(set_name, want, key="rate"):
+    n = sum(1 for r in rows if r["set"] == set_name and r["should"] == want)
+    return (sum(r[key] for r in rows if r["set"] == set_name and r["should"] == want) / n) if n else float("nan")
+
+print("\n== Results ==")
+summary = {}
+for set_name in sets:
+    tr, fa = rate_for(set_name, True), rate_for(set_name, False)
+    tl, fl = rate_for(set_name, True, "loaded_rate"), rate_for(set_name, False, "loaded_rate")
+    summary[set_name] = {"trigger_rate": round(tr, 3), "false_load_rate": round(fa, 3),
+                         "behavioral_load_rate": round(tl, 3), "behavioral_false_load_rate": round(fl, 3)}
+    print(f"  {set_name:<11} said-yes {tr:.2f} · false-yes {fa:.2f} · actually-loaded {tl:.2f} · false-loaded {fl:.2f}")
+thr = spec["threshold"]
+verdict = all(summary[s]["trigger_rate"] >= thr and summary[s]["false_load_rate"] <= thr for s in sets)
+print(f"  threshold {thr} — {'PASS' if verdict else 'FAIL'} (target: >=0.80 / <=0.20)")
+
+stamp = datetime.date.today().isoformat()
+res = {"tool": tool, "date": stamp, "reps": reps, "threshold": thr, "summary": summary,
+       "verdict": "PASS" if verdict else "FAIL", "rows": rows}
+(res_json := workdir / f"results-{tool}-{stamp}.json").write_text(json.dumps(res, indent=2), encoding="utf-8")
+md = ["| case | set | should | said | loaded | rate |", "|---|---|---|---|---|---|"]
+md += [f"| {r['id']} | {r['set']} | {'yes' if r['should'] else 'no'} | {','.join(a.upper() for a in r['answers'])} | {','.join('Y' if l else 'N' for l in r['loaded'])} | {r['rate']:.2f} |" for r in rows]
+md += ["", f"self-report / behavioral rates per set: `{json.dumps(summary)}` — verdict: **{res['verdict']}**"]
+(workdir / f"results-{tool}-{stamp}.md").write_text("\n".join(md), encoding="utf-8")
+print(f"\nresults written: {res_json}")
+PY
+}
 
 checks() {
   echo "== Trigger eval checks =="
@@ -117,4 +238,5 @@ case "$MODE" in
   checks) checks ;;
   prompts) prompts ;;
   judge) judge ;;
+  auto) auto "$@" ;;
 esac

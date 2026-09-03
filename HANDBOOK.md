@@ -56,7 +56,7 @@ Two failure modes define AI-generated architecture:
 
 ### How it works technically
 
-- **Progressive disclosure:** ~120 tokens of metadata always in context; a 132-line SKILL.md loads on trigger; 14 reference files load on demand. Idle cost ≈ nothing.
+- **Progressive disclosure:** ~270 tokens of metadata always in context (the expanded, trigger-hardened description is the load-bearing string); the 148-line SKILL.md loads on trigger; 14 reference files load on demand. Idle cost ≈ nothing.
 - **One lean skill, not 22 sub-skills:** the competitor's approach is a building-block wiki with per-component skills; this is a mode router + on-demand references. Leaner, cheaper, easier to audit.
 - **`scripts/botec.py`:** stdlib-only capacity calculator (QPS/storage/bandwidth/servers/cache + "decisions these numbers force" heuristics) with golden tests.
 - **No network, no keys, no telemetry.** Safe to install sight-unseen (see SECURITY.md).
@@ -252,7 +252,7 @@ system-design-skill/
 │   ├── run.sh                # one-command reproduction (checks + scaffold + prompts + judge)
 │   └── fixtures/             # demo-app codebase (map eval) + interview transcript
 ├── system-design/            # THE SKILL
-│   ├── SKILL.md              # mode router + four gates (132 lines)
+│   ├── SKILL.md              # mode router + four gates (148 lines)
 │   ├── scripts/botec.py      # capacity calculator (+ golden tests)
 │   └── references/           # 14 files: 5 methods, 9 knowledge (see README)
 ├── tools/validate_skill.py   # structure + frontmatter enforcement

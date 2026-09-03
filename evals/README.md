@@ -39,7 +39,12 @@ Scoring per set:
 
 The train set exists to tune the description (oblique phrasings, explicit exclusions); the validation set is the held-out verdict — never tune on it. Should-not cases concentrate on collision-heavy territory: "design a logo" (visual design), single-query DB tuning, pipeline debugging, framework pickers. When you change the description, re-run the train set first, then the validation set; publish both tables as a PR.
 
-**Status:** suite added 2026-09-03 alongside the hardened description; no model results published yet — the first PR with a filled tally is the data point that closes the "auto-trigger untested" caveat.
+**Status (2026-09-03):** the suite is now **automated** — `./run_triggers.sh --auto --tool <cli>` invokes the agent per case, records both the YES/NO self-report **and behavioral evidence** (whether the host actually loaded the skill — parsed from the tool's own load log), tallies the rates, and writes `evals/out/triggers/results-<tool>-<date>.{json,md}`. Supported CLIs: opencode, claude, codex, gemini (unknown tools fall back to `<tool> run <prompt>`). The skill's installed copies (opencode + shared `~/.agents/skills`) carry the hardened description as of this date. **No full tally published yet** — run the command below and PR the table; Claude Code and Codex numbers are the most wanted data points.
+
+```bash
+bash evals/run_triggers.sh --auto --tool opencode --reps 1   # ~15-25 min, streams per case
+bash evals/run_triggers.sh --auto --tool claude  --reps 3    # protocol target
+```
 
 ## Iteration log
 

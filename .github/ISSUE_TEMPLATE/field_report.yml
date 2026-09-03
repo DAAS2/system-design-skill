@@ -1,0 +1,91 @@
+name: "Field report"
+description: "Report a real run of the system-design skill — what it did in your agent, on your problem. Field reports are the most valuable issues this repo gets."
+labels: ["field-report"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for running the skill on real work. Bad designs produced *with* the skill are
+        the most valuable bug reports we can get — and good runs tell us which gates earn their keep.
+  - type: dropdown
+    id: agent
+    attributes:
+      label: Agent / tool
+      options:
+        - Claude Code
+        - OpenCode
+        - OpenAI Codex
+        - Cursor
+        - Gemini CLI
+        - GitHub Copilot
+        - Windsurf
+        - Cline
+        - Zed
+        - Other (specify in model/notes)
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Model
+      description: "e.g. claude-sonnet-4.6, gpt-5.2-codex — whatever your tool reports"
+    validations:
+      required: true
+  - type: textarea
+    id: prompt
+    attributes:
+      label: Your prompt (verbatim)
+      description: "The actual ask you gave the agent."
+      placeholder: "is Postgres enough for our workload, or do we need something fancier?"
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Detected mode (from the preamble)
+      description: "The skill's Gate-0 preamble should state the mode. If it didn't, pick that."
+      options:
+        - design
+        - map
+        - review
+        - evolve
+        - interview
+        - component
+        - no preamble / mode not stated
+    validations:
+      required: true
+  - type: dropdown
+    id: triggered
+    attributes:
+      label: Did the skill auto-trigger?
+      description: "YES = it loaded without you naming it; NO = you had to invoke it explicitly."
+      options:
+        - "yes"
+        - "no — I had to invoke it explicitly"
+        - "unsure"
+    validations:
+      required: true
+  - type: input
+    id: output_link
+    attributes:
+      label: Output link
+      description: "Link to the design doc / map / report the run produced (gist, repo path, pastebin)."
+  - type: textarea
+    id: helped
+    attributes:
+      label: What helped
+      description: "Which gates/behaviors earned their keep? Quote the skill if you can."
+  - type: textarea
+    id: failed
+    attributes:
+      label: What failed or felt wrong
+      description: "Wrong mode? Hand-waving that slipped through? Over-engineering it should have deleted? Be specific — this drives the roadmap."
+    validations:
+      required: true
+  - type: checkboxes
+    id: quote_permission
+    attributes:
+      label: Permission to quote
+      options:
+        - label: "You may quote this report (anonymized) in the README, evals, or marketing"
+          required: false
