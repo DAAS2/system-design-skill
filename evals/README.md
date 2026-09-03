@@ -24,6 +24,23 @@ Not everything is subjective. CI runs the golden tests for the calculator:
 cd system-design/scripts && python -m unittest test_botec
 ```
 
+CI also runs `tools/validate_skill.py` (structure), `tools/validate_evals.py`, and `tools/validate_trigger_evals.py`.
+
+## Trigger evals
+
+The behavioral evals above **force-load** the skill, so they measure what the skill does once active — never whether it loads at all. Invocation is the higher-risk behavior: the model matches a task against one `description:` line, usually implicitly. A skill that never fires on real phrasing has an effective score of zero regardless of its gates.
+
+`trigger_evals.json` addresses this with 20 labelled queries (10 train, 10 validation; half should-trigger, half must-not), each judged by asking a fresh agent — shown the skill's actual description — whether it would load the skill for that query, **3 repetitions per query**. `./run_triggers.sh` prints the prompts and the tally template.
+
+Scoring per set:
+
+- `trigger-rate` = mean rate over `should_trigger: true` cases → want **high** (≥0.5 minimum, ≥0.8 target)
+- `false-load-rate` = mean rate over `should_trigger: false` cases → want **low** (≤0.5 minimum, ≤0.2 target)
+
+The train set exists to tune the description (oblique phrasings, explicit exclusions); the validation set is the held-out verdict — never tune on it. Should-not cases concentrate on collision-heavy territory: "design a logo" (visual design), single-query DB tuning, pipeline debugging, framework pickers. When you change the description, re-run the train set first, then the validation set; publish both tables as a PR.
+
+**Status:** suite added 2026-09-03 alongside the hardened description; no model results published yet — the first PR with a filled tally is the data point that closes the "auto-trigger untested" caveat.
+
 ## Iteration log
 
 ### Iteration 1 — 2026-08-30
@@ -50,4 +67,4 @@ cd system-design/scripts && python -m unittest test_botec
 - The skill's biggest wins are *process discipline*: artifacts that exist (design docs, maps, reports), diagrams that render (Mermaid), right-sizing pushback backed by numbers, estimation before components, non-goals, and failure-mode walks. Baseline fails most loudly on exactly the behaviors working engineers care about — scale theater in the URL shortener, missing artifacts in the codebase map.
 - Baseline is strongest where the question is narrow and well-trodden (SQL vs NoSQL, RAG checklist). The skill's value concentrates where ambiguity, money, or failure are involved — which is where senior judgment actually matters.
 - Judge-noted examples of with-skill strengths: "stampede-by-construction" reasoning in the URL shortener (immutable slugs + cache-forever = no TTL storm, single-flight bounds misses); the 12-injection failure table in the rate limiter; the forcing-function discipline in the migration plan (capacity math used to *disprove* scale as the driver); ACL-correct cache keys in the RAG design.
-- **Skill changes from this iteration: none required.** Candidate follow-ups logged (not blocking): (1) baseline RAG/component evals already pass — keep those checklists honest rather than inflating them; (2) with-skill runs occasionally cite `botec.py` without pasting its output — SKILL.md already requires including the output table; keep enforcing.
+- **Skill changes from this iteration: none to the skill body.** Candidate follow-ups logged: (1) baseline RAG/component evals already pass — keep those checklists honest rather than inflating them; (2) with-skill runs occasionally cite `botec.py` without pasting its output. Both follow-ups shipped 2026-09-03 as tooling: `evals/trigger_evals.json` + `run_triggers.sh` (the force-loading gap above) and `scripts/gatecheck.py` (machine-checks the gate outputs, including the botec output block, in CI and on any design doc).

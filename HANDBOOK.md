@@ -10,7 +10,7 @@ The complete record: what this project is, why it exists, how it works, what it 
 
 **Two lines:** an Agent Skills folder (`system-design/`) that makes AI coding agents design, map, review, and evolve software systems with capacity math, failure analysis, right-sizing, and cost accounting — the behaviors of a senior engineer, enforced as gates rather than suggestions.
 
-**Repository:** `DAAS2/system-design-skill` (MIT, Agent Skills open standard, installable in 40+ tools).
+**Repository:** `DAAS2/system-design-skill` (MIT, Agent Skills open standard, installable in 40+ tools). **Launch status: repo still private at time of writing — the distribution claim below is untestable until it goes public and v1.0.0 is tagged/released (launch-sequence Day 0).**
 
 ### Elevator pitches, by audience
 

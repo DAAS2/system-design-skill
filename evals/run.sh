@@ -34,8 +34,10 @@ esac
 checks() {
   echo "== Deterministic checks =="
   (cd "$EVALS/../system-design/scripts" && python -m unittest test_botec -v 2>&1 | tail -2)
+  (cd "$EVALS/../system-design/scripts" && python -m unittest test_gatecheck 2>&1 | tail -2)
   python "$ROOT/tools/validate_skill.py"
   (cd "$EVALS" && python -c "import json; json.load(open('evals.json')); print('evals.json: OK')")
+  python "$ROOT/tools/validate_trigger_evals.py"
 }
 
 scaffold() {

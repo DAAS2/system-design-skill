@@ -64,4 +64,4 @@ Antidotes: shed load **below** capacity to break the cycle (overshoot protection
 4. Any "die" either produces a design change now or a documented accepted risk with tripwire metric.
 5. The walk often finds the missing component (a DLQ, a breaker, a budget) — add it to the design before finalizing.
 
-Sources: Release It! (Nygard), Tail at Scale (Dean & Barroso), Google SRE, Dynamo/Spanner papers, metastable failure literature (Obstgarten et al.).
+Sources: Release It! (Nygard), Tail at Scale (Dean & Barroso), Google SRE, Dynamo/Spanner papers, metastable failures (Bronson, Aghayev, Charapko & Zhu, "Metastable Failures in Distributed Systems", HotOS '21; Aghayev et al., "Metastable Failures in the Wild", OSDI '22).

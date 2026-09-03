@@ -1,6 +1,6 @@
 ---
 name: system-design
-description: End-to-end system design for real codebases and greenfield problems. Use when the user asks to design or architect a system ("design a URL shortener", "architecture for X"), map or reverse-engineer an existing codebase's architecture, review a design doc/PR/ADR for architectural flaws, plan a migration or scaling evolution, choose technologies (SQL vs NoSQL, Kafka vs SQS, cache strategy, sharding), estimate capacity (QPS, storage, bandwidth, servers, cost), or practice system design interviews. Covers distributed systems fundamentals (CAP, consistency, replication, partitioning, consensus), back-of-envelope math, failure-mode stress testing, right-sizing against over-engineering, cost estimation, and LLM-era infrastructure (RAG, vector search, model serving). Produces ADR-style design docs with Mermaid diagrams, architecture maps, scored reviews, and migration plans.
+description: End-to-end system design for real codebases and greenfield problems. Use when the user asks to design or architect a system, map or reverse-engineer an existing architecture, review a design doc/PR/ADR, plan a migration, scaling evolution or service split, choose technologies (SQL vs NoSQL, Kafka vs SQS, cache strategy, sharding), size infrastructure (servers, QPS, storage, cost), or practice system design interviews. Also fires on oblique asks such as "is Postgres enough?", "will this hold at 10x?", "should we split this service?", "write an ADR", "capacity plan for peak", "our DB falls over at peak". Covers capacity math, failure-mode stress testing, right-sizing against over-engineering, cost estimation, distributed-systems fundamentals, and LLM-era infrastructure (RAG, vector search, model serving). Produces ADR-style design docs with Mermaid diagrams, architecture maps, scored reviews, and migration plans. NOT for UI/visual/CSS/logo design, single-query database tuning, or DevOps pipeline debugging.
 license: MIT
 ---
 
@@ -21,6 +21,16 @@ Design, map, review, and evolve software systems the way a staff engineer does: 
 ## Step 0: Detect mode
 
 Classify the request, then follow the matching procedure. When ambiguous, ask one clarifying question or infer from context (codebase present → map/review/evolve likely; no codebase → design/interview likely).
+
+**Open every run with a preamble block** at the top of the first reply, before any analysis:
+
+```
+mode: <detected mode> · tier: <0-5, or n/a until known> · inputs: <files/context read>
+assumptions: <the 1-3 load-bearing assumptions, each falsifiable>
+producing: <the artifact this run ends with>
+```
+
+The preamble makes mode misrouting correctable in one turn — the user corrects a plan, not a finished document. The four gates (design, review, evolve) run after the preamble is acknowledged or corrected.
 
 | Mode | Trigger examples | Procedure |
 |------|-----------------|-----------|
@@ -70,7 +80,7 @@ Full procedures live in the reference files. Sketches:
 
 ### design (greenfield)
 
-Clarify (functional + non-functional + non-goals) → estimate (Gate 1) → high-level (API + data model + diagram; walk one read and one write path) → deep dive the 1-3 hardest components → stress test (Gate 2) → right-size (Gate 3) → cost (Gate 4) → write design doc to `docs/design/YYYY-MM-DD-<name>.md`. Interview practice uses the same loop under time budget.
+Clarify (functional + non-functional + non-goals) → estimate (Gate 1) → high-level (API + data model + diagram; walk one read and one write path) → deep dive the 1-3 hardest components → stress test (Gate 2) → right-size (Gate 3) → cost (Gate 4) → write design doc to `docs/design/YYYY-MM-DD-<name>.md`. Interview practice uses the same loop under time budget. Before declaring the run finished, machine-check the gate outputs: `python scripts/gatecheck.py <doc path>` (exit 0 = all gates produced their artifacts). If script execution is unavailable, verify the same seven checks manually against the quality bar below.
 
 ### map (codebase reverse-engineering)
 
@@ -126,6 +136,7 @@ Read these files only when the task needs them. All paths relative to this skill
 | `references/cost.md` | Gate 3 + 4: tiers, price catalog, cost anti-patterns |
 | `references/output-templates.md` | Writing any output artifact (templates + Mermaid snippets) |
 | `scripts/botec.py` | Gate 1: capacity math (run it, never hand-wave) |
+| `scripts/gatecheck.py` | Machine-checks the four gates' outputs on any design doc (CI + self-check) |
 
 ## Rules of engagement
 

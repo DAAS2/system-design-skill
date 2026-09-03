@@ -95,7 +95,7 @@ Every file in [`examples/`](examples/) was produced end-to-end by the skill in a
 
 ## Does it actually work? Yes — measured.
 
-20 fresh agent sessions, 10 tasks, blind-judged: **with-skill scored 56/56 (100%); baseline scored 46/56 (82%).** The skill didn't just change the answers — it changed the behaviors that matter: baseline recommended Kafka + multi-region + microservices for a 5k-rps URL shortener and produced no artifact for a codebase map; with-skill walked all 12 failure injections, right-sized every design, and persisted artifacts in every mode. Full table + methodology in [`evals/README.md`](evals/README.md).
+20 fresh agent sessions, 10 tasks, blind-judged: **with-skill scored 56/56 (100%); baseline scored 46/56 (82%).** Read the caveat with the number: one model, one date, and the skill was force-loaded (auto-trigger was untested — `evals/trigger_evals.json` + `./evals/run_triggers.sh` now exist to measure exactly that; publish your tally). The skill didn't just change the answers — it changed the behaviors that matter: baseline recommended Kafka + multi-region + microservices for a 5k-rps URL shortener and produced no artifact for a codebase map; with-skill walked all 12 failure injections, right-sized every design, and persisted artifacts in every mode. Full table + methodology in [`evals/README.md`](evals/README.md).
 
 **Reproduce it yourself, one command:** `./evals/run.sh` runs the deterministic checks, scaffolds the baseline/with-skill folders for all 10 evals, prints the prompts and the judging checklists. Publish your model's numbers as a PR — different models behave differently, and every data point keeps the claims honest.
 

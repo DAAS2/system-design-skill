@@ -1,0 +1,140 @@
+{
+  "version": 1,
+  "description": "Trigger evals: does the skill's description fire on real user phrasing? Behavioral evals (evals.json) force-load the skill, so invocation itself is never tested. Each case here labels a query should_trigger true or false; the judge asks a fresh agent whether it would load a skill with this description for this query, 3 times per case. Score per set; pass threshold in the set summary. Methodology in README.md (Trigger evals section).",
+  "threshold": 0.5,
+  "repetitions": 3,
+  "train": [
+    {
+      "id": "t-should-split-service",
+      "query": "Should we split this service? It's getting painful to deploy.",
+      "should_trigger": true,
+      "expected_mode": "evolve",
+      "rationale": "Oblique migration ask — never says 'system design'; evolve mode owns it."
+    },
+    {
+      "id": "t-should-postgres-enough",
+      "query": "Is Postgres enough for our workload, or do we need something fancier?",
+      "should_trigger": true,
+      "expected_mode": "component",
+      "rationale": "Oblique technology-choice question; component mode decision table."
+    },
+    {
+      "id": "t-should-review-before-lead",
+      "query": "Design review before I send this to my tech lead tomorrow, please.",
+      "should_trigger": true,
+      "expected_mode": "review",
+      "rationale": "Oblique review request — 'design review' names the review mode without the word architecture."
+    },
+    {
+      "id": "t-should-capacity-plan-bf",
+      "query": "We need a capacity plan for Black Friday. Traffic goes ~8x for 6 hours.",
+      "should_trigger": true,
+      "expected_mode": "design",
+      "rationale": "Oblique capacity ask — numbers-first math is the skill's core loop."
+    },
+    {
+      "id": "t-should-db-falling-over",
+      "query": "Our DB is falling over every day at peak. Where do we even start?",
+      "should_trigger": true,
+      "expected_mode": "evolve",
+      "rationale": "Oblique scale-pain ask; requires tier diagnosis before proposing changes."
+    },
+    {
+      "id": "t-not-center-div",
+      "query": "Center this div and make the cards on the landing page look more modern.",
+      "should_trigger": false,
+      "rationale": "UI/CSS work — 'design' collision case; explicitly out of scope in the description."
+    },
+    {
+      "id": "t-not-design-logo",
+      "query": "Design a logo for our startup.",
+      "should_trigger": false,
+      "rationale": "Visual design — the strongest 'design' word collision; must not fire."
+    },
+    {
+      "id": "t-not-slow-single-query",
+      "query": "Why is this SQL query slow? Here's the EXPLAIN output for one specific query.",
+      "should_trigger": false,
+      "rationale": "Single-query optimization, not architecture — explicit exclusion."
+    },
+    {
+      "id": "t-not-pipeline-debug",
+      "query": "My GitHub Actions deploy step fails with exit code 1. Can you debug the pipeline?",
+      "should_trigger": false,
+      "rationale": "DevOps pipeline debugging — explicit exclusion."
+    },
+    {
+      "id": "t-not-refactor-function",
+      "query": "Refactor this function to remove the duplicated error-handling code.",
+      "should_trigger": false,
+      "rationale": "Code-style refactoring inside one file; no architecture surface."
+    }
+  ],
+  "validation": [
+    {
+      "id": "v-should-hold-10x",
+      "query": "Will this hold at 10x traffic, or are we rebuilding it in a year?",
+      "should_trigger": true,
+      "expected_mode": "review",
+      "rationale": "Oblique stress-test ask; gates and evolution section exist for exactly this."
+    },
+    {
+      "id": "v-should-write-adr",
+      "query": "Write an ADR for moving our session storage off the app server.",
+      "should_trigger": true,
+      "expected_mode": "design",
+      "rationale": "ADR is design-mode output; description names ADR-style docs explicitly."
+    },
+    {
+      "id": "v-should-how-many-servers",
+      "query": "How many servers do I need for 20k requests per second?",
+      "should_trigger": true,
+      "expected_mode": "component",
+      "rationale": "Capacity sizing question — botec math, never a bare number."
+    },
+    {
+      "id": "v-should-mock-interview",
+      "query": "Mock system design interview, L5 target, grade me hard.",
+      "should_trigger": true,
+      "expected_mode": "interview",
+      "rationale": "Direct interview trigger; must keep firing after the description rewrite."
+    },
+    {
+      "id": "v-should-map-checkout",
+      "query": "What does our checkout architecture actually look like? Map it before the incident review.",
+      "should_trigger": true,
+      "expected_mode": "map",
+      "rationale": "Direct map trigger with file-path evidence expectations."
+    },
+    {
+      "id": "v-not-react-state-lib",
+      "query": "Which React state library should we pick for this dashboard?",
+      "should_trigger": false,
+      "rationale": "Frontend framework choice — not a distributed-systems decision."
+    },
+    {
+      "id": "v-not-unit-tests",
+      "query": "Write unit tests for this YAML parser, including edge cases.",
+      "should_trigger": false,
+      "rationale": "Code-level testing; no architecture surface."
+    },
+    {
+      "id": "v-not-off-by-one",
+      "query": "Fix this off-by-one bug in my pagination loop.",
+      "should_trigger": false,
+      "rationale": "Bug fix in existing code; no design, scale, or migration dimension."
+    },
+    {
+      "id": "v-not-nginx-setup",
+      "query": "Give me an nginx config that sets up a reverse proxy with TLS termination.",
+      "should_trigger": false,
+      "rationale": "Configuration task; ops, not architecture."
+    },
+    {
+      "id": "v-not-rest-vs-soap",
+      "query": "What's the difference between REST and SOAP?",
+      "should_trigger": false,
+      "rationale": "Definitional question with no workload to size or design to produce."
+    }
+  ]
+}

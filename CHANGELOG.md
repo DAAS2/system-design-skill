@@ -2,9 +2,22 @@
 
 All notable changes to this project are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning is [SemVer](https://semver.org/) — MAJOR when the method changes incompatibly, MINOR for new content, PATCH for corrections.
 
-## [1.0.0] - 2026-08-30
+## [1.0.0] - 2026-09-03
 
 ### Added
+- **Trigger evals** — `evals/trigger_evals.json` (20 labelled queries, train/validation split) + `evals/run_triggers.sh` + `tools/validate_trigger_evals.py`: measures whether the skill *fires* on real phrasing (oblique asks + should-not collisions), which behavioral evals could not test because they force-load the skill.
+- **`scripts/gatecheck.py`** (+ golden tests) — machine-checkable gate contract: parses a design doc and exits non-zero when a gate output is missing (capacity block, 12-injection table, tier line, monthly cost, cost-per-1k, non-goals, evolution). Wired into CI against the verbatim design examples; SKILL.md's design loop now self-checks with it before finishing.
+- **Mode + assumptions preamble (Gate 0)** — every run opens with detected mode / tier / inputs / assumptions / artifact, making misrouting correctable in one turn.
+
+### Changed
+- **Hardened description** (SKILL.md): imperative form with oblique trigger phrasings and explicit should-not exclusions (UI/CSS/logo design, single-query DB tuning, pipeline debugging); validated against `trigger_evals.json`'s train set.
+- README eval paragraph front-loads the honest caveats (one model, one date, force-loaded) next to the headline numbers.
+- `evals/README.md`: trigger-eval methodology + scoring rules; iteration-1 "skill changes" note updated to record the follow-ups shipping as tooling.
+
+### Fixed
+- Metastable-failure attribution in `references/stress-tests.md`: Bronson, Aghayev, Charapko & Zhu (HotOS '21) + Aghayev et al. (OSDI '22) — was misattributed to "Obstgarten et al.".
+
+### Added (earlier 1.0.0 batch, 2026-08-30)
 - `HANDBOOK.md` — the complete project record: what the skill does, evidence, users, competition, marketing & distribution playbook, star strategy, maintenance, risks, repo map, metrics.
 - `examples/design-griller-baseline-vs-skill.md` — same prompt, two agents, one tear-down (real eval outputs).
 - `evals/run.sh` — one-command eval reproduction: deterministic checks + scaffold + prompts + judge checklists.
